@@ -2,6 +2,8 @@ $(document).ready(function(){
 	var exe_list = [];
 	var currentStep = 0;
 	var step_list = [];
+	var elementTimeOut;
+	var clickTimeOut;
 
 	init_intro = function(){
 		var step_list = document.querySelectorAll('*[data-step]');
@@ -26,16 +28,25 @@ $(document).ready(function(){
 			// $(element.element).css({'background':'red'});
 			setHighlight(element);
 			if (element.time == 'NaN') {
-				$(element.element).click(function(){
-					
+
+				clickTimeOut = setTimeout(function(){
 					var elem = nextStep();
 					pop_intro(elem);
 					removeHighlight(element);
 					// $(element.element).css({'background':'white'});
+				},5000)
+
+				$(element.element).click(function(){
+					
+					// var elem = nextStep();
+					// pop_intro(elem);
+					removeHighlight(element);
+					clearTimeout(clickTimeOut);
+					// $(element.element).css({'background':'white'});
 				});
 			}
 			else{
-				setTimeout(function(){
+				elementTimeOut = setTimeout(function(){
 					var elem = nextStep();
 					pop_intro(elem);
 					removeHighlight(element);
@@ -68,11 +79,11 @@ $(document).ready(function(){
 	};
 
 	introEnd = function(){
-		alert("The End");
+		// alert("The End");
 	};
 
 	setHighlight = function(element){
-		$(element.element).css({'border':'1px solid blue'});
+		$(element.element).css({'border':'2px solid #0096fd'});
 	};
 
 	removeHighlight = function(element){
@@ -97,6 +108,11 @@ $(document).ready(function(){
 	};
 
 	intro_destroy = function(){
+		clearTimeout(clickTimeOut);
+		clearTimeout(elementTimeOut);
+		for (var i = 0; i < exe_list.length; i++) {
+			$(exe_list[i].element).css({'border':'1px solid white'});
+		};
 		exe_list = [];
 		currentStep = 0;
 		step_list = [];
